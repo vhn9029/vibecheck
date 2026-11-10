@@ -44,3 +44,135 @@ h1 {
     line-height: 1.7; 
     color: #dedbea; 
 }
+
+
+/* Sprint 2 - Music Journal Form */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+}
+
+label {
+    color: #dedbea;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    background: #17152a;
+    color: white;
+    border: 1px solid #615782;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #b39aff;
+}
+
+button {
+    margin-top: 15px;
+    padding: 14px;
+    background: #9878ef;
+    color: #111020;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #b39aff;
+}
+
+nav {
+    margin-top: 25px;
+}
+
+nav a {
+    color: #b39aff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+/* Sprint 2 - Database messages */
+
+.success-message {
+    margin-top: 25px;
+    padding: 15px;
+    background: #174835;
+    color: #d1fae5;
+    border: 1px solid #4ade80;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.error-message {
+    margin-top: 25px;
+    padding: 15px;
+    background: #57252c;
+    color: #ffe0e0;
+    border: 1px solid #ff8585;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+}
+
+
+/* Sprint 2 - Journal History */
+
+.history-entry {
+    background: #17152a;
+    border: 1px solid #615782;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.history-entry h3 {
+    color: #b39aff;
+    margin-top: 0;
+    font-size: 22px;
+}
+
+.history-entry p {
+    color: #dedbea;
+    line-height: 1.6;
+}
+
+.entry-date {
+    font-size: 13px;
+    color: #aaa3c5 !important;
+}
+
+.delete-button {
+    background: #a83d56;
+    color: white;
+    margin-top: 10px;
+}
+
+.delete-button:hover {
+    background: #c55470;
+}
+
+nav a {
+    margin: 0 10px;
+}
+
+.card a {
+    color: #b39aff;
+}
