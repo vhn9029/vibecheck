@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Music Journal - VibeCheck</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <main class="container">
+
+        <h1>🎧 VibeCheck</h1>
+        <p class="subtitle">Your Music Journal</p>
+
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('history') }}">Journal History</a>
+        </nav>
+        
+
+        {% if message %}
+            <div class="success-message" role="status">
+                ✓ {{ message }}
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="error-message" role="alert">
+                ✗ {{ error }}
+            </div>
+        {% endif %}
+
+
+        <section class="card">
+            <h2>Log Your Music</h2>
+            
+            <form action="{{ url_for('journal') }}"
+                  method="POST">
+
+                <label for="song">Song Title</label>
+
+                <input type="text"
+                       id="song"
+                       name="song"
+                       maxlength="150"
+                       placeholder="Enter a song title"
+                       required>
+
+                <label for="artist">Artist</label>
+
+                <input type="text"
+                       id="artist"
+                       name="artist"
+                       maxlength="150"
+                       placeholder="Enter the artist"
+                       required>
+
+                <label for="mood">How are you feeling?</label>
+
+                <select id="mood" name="mood" required>
+                    <option value="">Select a mood</option>
+                    <option value="Happy">Happy</option>
+                    <option value="Sad">Sad</option>
+                    <option value="Relaxed">Relaxed</option>
+                    <option value="Energetic">Energetic</option>
+                    <option value="Nostalgic">Nostalgic</option>
+                    <option value="Stressed">Stressed</option>
+                </select>
+
+                <label for="note">Journal Note (Optional)</label>
+
+                <textarea id="note"
+                          name="note"
+                          maxlength="1000"
+                          rows="4"
+                          placeholder="Why did you choose this song?"></textarea>
+
+                <button type="submit">Save Entry</button>
+            </form>
+        </section>
+
+    </main>
+</body>
+</html>

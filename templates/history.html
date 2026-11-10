@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Journal History - VibeCheck</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <main class="container">
+
+        <h1>🎧 VibeCheck</h1>
+        <p class="subtitle">Your Music History</p>
+
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('journal') }}">New Entry</a>
+        </nav>
+
+        <section class="card">
+            <h2>Journal History</h2>
+            
+            # Checks whether saved entries exist.
+            {% if entries %}
+
+                # Loops through the database results.
+                {% for entry in entries %}
+                    <article class="history-entry">
+
+                        
+                        <h3>{{ entry["song"] }}</h3>
+                        <p>
+                            <strong>Artist:</strong>
+                            {{ entry["artist"] }}
+                        </p>
+
+                        <p>
+                            <strong>Mood:</strong>
+                            {{ entry["mood"] }}
+                        </p>
+
+                        {% if entry["note"] %}
+                            <p>
+                                <strong>Note:</strong>
+                                {{ entry["note"] }}
+                            </p>
+                        {% endif %}
+
+                        <p class="entry-date">
+                            {{ entry["created_at"] }} UTC
+                        </p>
+
+
+                        <form   action="{{ url_for('delete_entry', entry_id=entry['id']) }}"
+                                method="POST"
+                                onsubmit="return confirm('Delete this journal entry?');">
+
+                            <button type="submit"
+                                    class="delete-button">
+                                Delete Entry
+                            </button>
+                        </form>
+
+                    </article>
+                {% endfor %}
+
+            {% else %}
+
+                <p>
+                    You haven't saved any music entries yet.
+                </p>
+
+                <p>
+                    <a href="{{ url_for('journal') }}">
+                        Create your first entry
+                    </a>
+                </p>
+
+            {% endif %}
+        </section>
+
+    </main>
+</body>
+</html>
