@@ -25,12 +25,20 @@
 
         <section class="card">
             <h2>Journal History</h2>
-            
-            # Checks whether saved entries exist.
-            {% if entries %}
 
-                # Loops through the database results.
+            {% if error %}
+                <div class="error-message" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            
+
+            {# Checks whether saved entries exist #}
+            {% if not error and entries %}
+
+                {# Loops through the database results #}
                 {% for entry in entries %}
+
                     <article class="history-entry">
 
                         
@@ -70,7 +78,7 @@
                     </article>
                 {% endfor %}
 
-            {% else %}
+            {% elif not error %}
 
                 <p>
                     You haven't saved any music entries yet.
