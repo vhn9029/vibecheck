@@ -1,52 +1,115 @@
-* { 
+
+/* ========================================
+   VibeCheck - Main Website Styling
+   Sprint 3: Visual Improvements
+======================================== */
+
+* {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #111020;
-    color: #ffffff;
     min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    color: #ffffff;
+    background:
+        radial-gradient(
+            circle at top,
+            #241c3d 0%,
+            #111020 55%
+        );
 }
 
-.container { 
-    max-width: 800px; 
-    margin: 80px auto; 
-    padding: 24px; 
-    text-align: center; 
+/* Main Layout */
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    text-align: center;
 }
 
-h1 { 
+h1 {
+    margin: 0 0 12px;
     font-size: 48px;
     color: #b39aff;
-    margin-bottom: 12px;
+    letter-spacing: -1px;
 }
 
-.subtitle{ 
+.subtitle {
+    margin: 0 0 24px;
     color: #b9b5d0;
     font-size: 18px;
 }
 
-.card {
-    margin-top: 40px; 
-    padding: 32px; 
-    border-radius: 16px; 
-    background: #242139;
-    border: 1px solid #413a61;
+/* Navigation Bar */
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 28px 0;
 }
 
-.card h2 { 
+nav a {
+    display: inline-block;
+    margin: 0;
+    padding: 11px 18px;
+    color: #dedbea;
+    background: #242139;
+    border: 1px solid #51466f;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+nav a:hover {
+    background: #57428e;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* General Content Cards */
+
+.card {
+    margin-top: 32px;
+    padding: 32px;
+    background: #242139;
+    border: 1px solid #413a61;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+    margin-top: 0;
     color: #d2c4ff;
 }
 
 .card p {
-    line-height: 1.7; 
-    color: #dedbea; 
+    color: #dedbea;
+    line-height: 1.7;
 }
 
+.card a {
+    color: #b39aff;
+}
 
-/* Sprint 2 - Music Journal Form */
+.card a:hover {
+    color: #d2c4ff;
+}
+
+/* ========================================
+   Music Journal Form
+======================================== */
 
 form {
     display: flex;
@@ -56,174 +119,220 @@ form {
 }
 
 label {
+    margin-top: 8px;
     color: #dedbea;
     font-weight: bold;
-    margin-top: 8px;
 }
 
 input,
 select,
 textarea {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
+    color: #ffffff;
     background: #17152a;
-    color: white;
     border: 1px solid #615782;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 16px;
-    font-family: Arial, sans-serif;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #aaa3c5;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
     outline: 2px solid #b39aff;
+    outline-offset: 2px;
+    border-color: #b39aff;
 }
+
+/* Buttons */
 
 button {
     margin-top: 15px;
-    padding: 14px;
-    background: #9878ef;
+    padding: 14px 22px;
     color: #111020;
+    background: #a88af7;
     border: none;
-    border-radius: 8px;
-    font-weight: bold;
+    border-radius: 10px;
     font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
 }
 
 button:hover {
-    background: #b39aff;
+    background: #c2adff;
+    transform: translateY(-2px);
 }
 
-nav {
-    margin-top: 25px;
+button:active {
+    transform: translateY(0);
 }
 
-nav a {
-    color: #b39aff;
-    text-decoration: none;
-    font-weight: bold;
+button:focus-visible,
+nav a:focus-visible,
+.card a:focus-visible {
+    outline: 3px solid #d2c4ff;
+    outline-offset: 3px;
 }
 
-
-/* Sprint 2 - Database messages */
+/* ========================================
+   Database Confirmation Messages
+======================================== */
 
 .success-message {
     margin-top: 25px;
-    padding: 15px;
-    background: #174835;
+    padding: 16px;
     color: #d1fae5;
+    background: #174835;
     border: 1px solid #4ade80;
-    border-radius: 8px;
+    border-radius: 10px;
     text-align: center;
     font-weight: bold;
 }
 
 .error-message {
     margin-top: 25px;
-    padding: 15px;
-    background: #57252c;
+    padding: 16px;
     color: #ffe0e0;
+    background: #57252c;
     border: 1px solid #ff8585;
-    border-radius: 8px;
+    border-radius: 10px;
     text-align: center;
     font-weight: bold;
 }
 
-
-/* Sprint 2 - Journal History */
+/* ========================================
+   Journal History
+======================================== */
 
 .history-entry {
+    margin-top: 20px;
+    padding: 24px;
     background: #17152a;
     border: 1px solid #615782;
     border-radius: 12px;
-    padding: 20px;
-    margin-top: 20px;
     text-align: left;
+    transition: border-color 0.2s ease;
+}
+
+.history-entry:hover {
+    border-color: #a88af7;
 }
 
 .history-entry h3 {
-    color: #b39aff;
     margin-top: 0;
+    margin-bottom: 12px;
+    color: #b39aff;
     font-size: 22px;
 }
 
 .history-entry p {
+    margin: 10px 0;
     color: #dedbea;
     line-height: 1.6;
+    overflow-wrap: anywhere;
 }
 
 .entry-date {
-    font-size: 13px;
     color: #aaa3c5 !important;
+    font-size: 13px;
+}
+
+/* Delete Buttons */
+
+.history-entry form {
+    display: block;
+    margin-top: 12px;
 }
 
 .delete-button {
-    background: #a83d56;
-    color: white;
+    width: auto;
     margin-top: 10px;
+    padding: 11px 18px;
+    background: #a83d56;
+    color: #ffffff;
 }
 
 .delete-button:hover {
     background: #c55470;
 }
 
-nav a {
-    margin: 0 10px;
-}
-
-.card a {
-    color: #b39aff;
-}
-
-/* Sprint 3 - Music Statistics Dashboard */
+/* ========================================
+   Music Statistics Dashboard
+======================================== */
 
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 15px;
+    gap: 16px;
     margin-top: 35px;
 }
 
 .stat-card {
+    min-width: 0;
+    padding: 26px 14px;
     background: #242139;
     border: 1px solid #615782;
-    border-radius: 12px;
-    padding: 20px 12px;
-    min-width: 0;
-    overflow-wrap: anywhere;
+    border-radius: 14px;
     text-align: center;
+    overflow-wrap: anywhere;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.stat-card:hover {
+    border-color: #a88af7;
+    transform: translateY(-3px);
 }
 
 .stat-card h2 {
+    margin: 0 0 10px;
     color: #b39aff;
-    font-size: 24px;
-    margin-bottom: 10px;
+    font-size: 26px;
 }
 
 .stat-card p {
+    margin: 0;
     color: #dedbea;
     font-size: 14px;
 }
 
+/* Mood Breakdown */
+
 .mood-item {
-    margin-top: 22px;
+    margin-top: 24px;
 }
 
 .mood-label {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 10px;
+    margin-bottom: 10px;
     text-align: left;
     color: #dedbea;
-    margin-bottom: 8px;
     font-size: 14px;
 }
 
 .mood-track {
     width: 100%;
-    height: 12px;
+    height: 13px;
     background: #17152a;
     border-radius: 10px;
     overflow: hidden;
@@ -231,13 +340,55 @@ nav a {
 
 .mood-fill {
     height: 100%;
-    background: #9878ef;
+    background: linear-gradient(
+        90deg,
+        #7952ce,
+        #b39aff
+    );
     border-radius: 10px;
 }
 
+/* ========================================
+   Responsive Design
+======================================== */
+
 @media (max-width: 600px) {
+    .container {
+        padding: 35px 16px;
+    }
+
+    h1 {
+        font-size: 36px;
+    }
+
+    .subtitle {
+        font-size: 16px;
+    }
+
+    nav {
+        gap: 8px;
+    }
+
+    nav a {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .card {
+        padding: 22px 18px;
+    }
+
     .stats-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 22px;
+    }
+
+    .history-entry {
+        padding: 18px;
     }
 
     .mood-label {
@@ -245,71 +396,19 @@ nav a {
     }
 }
 
+/* Reduced Motion Accessibility */
 
-/* Sprint 3 - Music Statistics Dashboard */
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 15px;
-    margin-top: 35px;
-}
-
-.stat-card {
-    background: #242139;
-    border: 1px solid #615782;
-    border-radius: 12px;
-    padding: 20px 12px;
-    min-width: 0;
-    overflow-wrap: anywhere;
-    text-align: center;
-}
-
-.stat-card h2 {
-    color: #b39aff;
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-.stat-card p {
-    color: #dedbea;
-    font-size: 14px;
-}
-
-.mood-item {
-    margin-top: 22px;
-}
-
-.mood-label {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    text-align: left;
-    color: #dedbea;
-    margin-bottom: 8px;
-    font-size: 14px;
-}
-
-.mood-track {
-    width: 100%;
-    height: 12px;
-    background: #17152a;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.mood-fill {
-    height: 100%;
-    background: #9878ef;
-    border-radius: 10px;
-}
-
-@media (max-width: 600px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
+@media (prefers-reduced-motion: reduce) {
+    nav a,
+    button,
+    .history-entry,
+    .stat-card {
+        transition: none;
     }
 
-    .mood-label {
-        flex-wrap: wrap;
+    nav a:hover,
+    button:hover,
+    .stat-card:hover {
+        transform: none;
     }
 }

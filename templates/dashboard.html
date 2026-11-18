@@ -59,7 +59,7 @@
                             <div class="mood-label">
                                 <span>{{ item.name }}</span>
                                 <span>
-                                    {{ item.count }} entries
+                                    {{ item.count }} {{'entry' if item.count == 1 else 'entries'}}
                                     ({{ item.percentage }}%)
                                 </span>
                             </div>
