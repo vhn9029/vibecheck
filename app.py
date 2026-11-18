@@ -1,39 +1,40 @@
-# Allows Python to work with SQLite
-import sqlite3
-from pathlib import Path
 
-from flask import Flask, render_template, request, redirect, url_for
+import pyodbc
+
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for
+)
 
 app = Flask(__name__)
 
-# Store the database beside app.py.
-BASE_DIR = Path(__file__).resolve().parent
-DATABASE = BASE_DIR / "vibecheck.db"
 
+# SQL Server connection settings
+def get_db_connection():
+    connection_string = (
+        "DRIVER={ODBC Driver 18 for SQL Server};"
+        r"SERVER=localhost\SQLEXPRESS;"
+        "DATABASE=VibeCheckDB;"
+        "Trusted_Connection=yes;"
+        "Encrypt=yes;"
+        "TrustServerCertificate=yes;"
+    )
+
+    return pyodbc.connect(connection_string, timeout=5)
+
+
+# Allowed moods
 MOODS = {
     "Happy",
     "Sad",
     "Relaxed",
     "Energetic",
     "Nostalgic",
-    "Stressed",
+    "Stressed"
 }
-
-
-# Create the database and entries table if it doesn't exist.
-def init_db():
-    with sqlite3.connect(DATABASE) as conn:
-        #Defines how journal entries are stored. 
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS journal_entries (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                song TEXT NOT NULL,
-                artist TEXT NOT NULL,
-                mood TEXT NOT NULL,
-                note TEXT,
-                created_at TEXT DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
 
 
 # Home page
@@ -47,12 +48,13 @@ def home():
 def journal():
 
     if request.method == "POST":
+
         song = request.form.get("song", "").strip()
         artist = request.form.get("artist", "").strip()
         mood = request.form.get("mood", "").strip()
         note = request.form.get("note", "").strip()
 
-        # Validate the submitted information.
+        # Validate form information
         if (
             not song
             or not artist
@@ -66,53 +68,87 @@ def journal():
                 error="Please check your entry and try again."
             ), 400
 
-        try:
-            # Save the entry to SQLite.
-            with sqlite3.connect(DATABASE) as conn:
-                # Saves new journal entries.
-                # '?' are placeholders so the values safely pass user information to SQL.
-                conn.execute(
-                    """
-                    INSERT INTO journal_entries
-                    (song, artist, mood, note)
-                    VALUES (?, ?, ?, ?)
-                    """,
-                    (song, artist, mood, note)
-                )
+        connection = None
 
-        # Handles database errors. 
-        except sqlite3.Error:
-            app.logger.exception("Unable to save journal entry")
+        try:
+            # Connect to SQL Server
+            connection = get_db_connection()
+            cursor = connection.cursor()
+
+            # Save journal entry
+            cursor.execute(
+                """
+                INSERT INTO dbo.journal_entries
+                (song, artist, mood, note)
+                VALUES (?, ?, ?, ?)
+                """,
+                song, artist, mood, note
+            )
+
+            # Commit the database transaction
+            connection.commit()
+
+        except pyodbc.Error:
+            if connection is not None:
+                connection.rollback()
+
+            app.logger.exception("Unable to save entry")
+
             return render_template(
                 "journal.html",
-                error="Your entry could not be saved. Please try again."
+                error="Unable to save entry. Please try again."
             ), 500
 
-        # Only show success after saving to the database.
+        finally:
+            if connection is not None:
+                connection.close()
+
+        # Success appears only after the database commit
         return render_template(
             "journal.html",
-            # Displays confirmation after saving. 
             message="Entry saved successfully!"
         )
 
     return render_template("journal.html")
 
 
-
 # Journal History page
 @app.route("/history")
 def history():
 
-    with sqlite3.connect(DATABASE) as conn:
-        conn.row_factory = sqlite3.Row
+    connection = None
 
-        entries = conn.execute(
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        cursor.execute(
             """
             SELECT id, song, artist, mood, note, created_at
-            FROM journal_entries
+            FROM dbo.journal_entries
             ORDER BY id DESC
             """
-        ).fetchall()
+        )
+
+        # Convert SQL Server rows to dictionaries
+        columns = [column[0] for column in cursor.description]
+        entries = [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]
+
+    except pyodbc.Error:
+        app.logger.exception("Unable to load journal history")
+
+        return render_template(
+            "history.html",
+            entries=[],
+            error="Unable to load journal history."
+        ), 500
+
+    finally:
+        if connection is not None:
+            connection.close()
 
     return render_template(
         "history.html",
@@ -124,14 +160,32 @@ def history():
 @app.route("/delete/<int:entry_id>", methods=["POST"])
 def delete_entry(entry_id):
 
-    with sqlite3.connect(DATABASE) as conn:
-        conn.execute(
-            "DELETE FROM journal_entries WHERE id = ?",
-            (entry_id,)
+    connection = None
+
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        cursor.execute(
+            "DELETE FROM dbo.journal_entries WHERE id = ?",
+            entry_id
         )
+
+        connection.commit()
+
+    except pyodbc.Error:
+        if connection is not None:
+            connection.rollback()
+
+        app.logger.exception("Unable to delete entry")
+        return "Unable to delete journal entry.", 500
+
+    finally:
+        if connection is not None:
+            connection.close()
 
     return redirect(url_for("history"))
 
+
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
