@@ -187,5 +187,92 @@ def delete_entry(entry_id):
     return redirect(url_for("history"))
 
 
+# Music Statistics Dashboard
+@app.route("/dashboard")
+def dashboard():
+    connection = None
+
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Count all saved journal entries
+        cursor.execute(
+            "SELECT COUNT(*) FROM dbo.journal_entries"
+        )
+        total_entries = cursor.fetchone()[0]
+
+        # Find the most frequently recorded mood
+        cursor.execute("""
+            SELECT TOP (1) mood, COUNT(*) AS mood_count
+            FROM dbo.journal_entries
+            GROUP BY mood
+            ORDER BY mood_count DESC, mood ASC
+        """)
+
+        row = cursor.fetchone()
+        top_mood = row[0] if row else "None yet"
+
+        # Find the most frequently recorded artist
+        cursor.execute("""
+            SELECT TOP (1) artist, COUNT(*) AS artist_count
+            FROM dbo.journal_entries
+            GROUP BY artist
+            ORDER BY artist_count DESC, artist ASC
+        """)
+
+        row = cursor.fetchone()
+        top_artist = row[0] if row else "None yet"
+
+        # Calculate the breakdown of moods
+        cursor.execute("""
+            SELECT mood, COUNT(*) AS mood_count
+            FROM dbo.journal_entries
+            GROUP BY mood
+            ORDER BY mood_count DESC, mood ASC
+        """)
+
+        mood_breakdown = []
+
+        for row in cursor.fetchall():
+            count = row[1]
+
+            percentage = (
+                round(count / total_entries * 100, 1)
+                if total_entries > 0 else 0
+            )
+
+            mood_breakdown.append({
+                "name": row[0],
+                "count": count,
+                "percentage": percentage
+            })
+
+        return render_template(
+            "dashboard.html",
+            total_entries=total_entries,
+            top_mood=top_mood,
+            top_artist=top_artist,
+            mood_breakdown=mood_breakdown
+        )
+
+    except pyodbc.Error:
+        app.logger.exception(
+            "Unable to load music statistics"
+        )
+
+        return render_template(
+            "dashboard.html",
+            error="Unable to load dashboard statistics.",
+            total_entries=0,
+            top_mood="Unavailable",
+            top_artist="Unavailable",
+            mood_breakdown=[]
+        ), 500
+
+    finally:
+        if connection is not None:
+            connection.close()
+
 if __name__ == "__main__":
     app.run(debug=True)
